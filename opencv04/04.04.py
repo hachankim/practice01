@@ -1,0 +1,19 @@
+import cv2
+import numpy as np
+
+img = cv2.imread("shape.png", cv2.IMREAD_GRAYSCALE)
+edges = cv2.Canny(img, 50, 100)
+
+# Canny 에지 이미지에서 직선 검출
+lines = cv2.HoughCircles(edges,cv2.HOUGH_GRADIENT,1,100,param1 = 250, param2 = 10, minRadius = 80, maxRadius = 120)
+
+dst = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGR) # 컬러로 변환해 그리기
+if lines is not None:
+    for line in lines:
+        x1, y1, x2, y2 = line[0]
+        cv2.circle(dst, (x1, y1), (x2, y2), (0, 0, 255), 2)
+
+cv2.imshow("img", img)
+cv2.imshow("dst", dst)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
